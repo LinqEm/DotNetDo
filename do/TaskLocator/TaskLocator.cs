@@ -13,16 +13,14 @@ namespace DotNetDo
             this._configsLoader = configsLoader;
         }
 
-        public Task? FindByName(string taskName)
+        public Task? FindByName(string taskQuery)
         {
-            foreach (var config in this._configsLoader)
+            taskQuery = taskQuery.ToLower();
+            foreach (var task in this.FindAll())
             {
-                foreach (var task in config.Tasks)
-                {
-                    var taskAliases = task?.Name?.Trim().Split(Environment.NewLine);
-                    if (taskAliases?.Any(n => n.Trim().Equals(taskName, StringComparison.OrdinalIgnoreCase)) ?? false)
-                        return task;
-                }
+                var taskNames = task.NameArray!;
+                if (task.NameArray?.Any(n => n == taskQuery) ?? false)
+                    return task;
             }
             return null;
         }
@@ -40,11 +38,11 @@ namespace DotNetDo
             var taskNamesVisited = new List<string>();
             foreach (var task in this.FindAll())
             {
-                var taskNames = task.Name!.Trim().Split(Environment.NewLine).Select(t => t.Trim().ToLower()).Where(t => !taskNamesVisited.Contains(t)).ToList();
+                var taskNames = task.NameArray!.Where(t => !taskNamesVisited.Contains(t)).ToList();
                 if (!taskNames.Any()) 
                     continue;
                 taskNamesVisited.AddRange(taskNames);
-                task.Name = string.Join(Environment.NewLine, taskNames);
+                task.NameArray = taskNames;
                 yield return task;
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DotNetDo
 {
@@ -35,13 +36,12 @@ namespace DotNetDo
         /// </summary>
         public bool DoNotRestoreWorkingDirectory { get; set; }
 
-        /// <summary>
-        /// The configuration within which this task is declared.
-        /// </summary>
-        /// <remarks>
-        /// This property is only populated after loaded from a configuration file via <see cref="ConfigurationsLoader"/>.
-        /// </remarks>
-        public Configuration? ParentConfiguration { get; set; }
+        internal Configuration? ParentConfiguration { get; set; }
+
+        internal IEnumerable<string>? NameArray {
+            get => this.Name?.Trim().ToLower().Split(Environment.NewLine).Select(s => s.Trim()).ToList();
+            set => this.Name = value != null ? string.Join(Environment.NewLine, value) : null;
+        }
 
         public string? ResolveAbsoluteWorkingDirectory()
         {
@@ -49,20 +49,16 @@ namespace DotNetDo
                 return null;
             var workingDirectoryIsRoot = Path.IsPathRooted(this.WorkingDirectory);
             if (workingDirectoryIsRoot)
-            {
                 if (Directory.Exists(this.WorkingDirectory))
                     return this.WorkingDirectory;
                 else
                     return null;
-            }
             var configDirPath = Path.GetDirectoryName(this.ParentConfiguration?.FilePath);
             if (configDirPath == null)
                 return null;
             var absolutePath = Path.Combine(configDirPath, this.WorkingDirectory);
-            if (Directory.Exists(absolutePath)) 
-            {
+            if (Directory.Exists(absolutePath))
                 return absolutePath;
-            }
             return null;
         }
 

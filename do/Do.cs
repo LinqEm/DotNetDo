@@ -82,13 +82,11 @@ namespace DotNetDo
 
         private int List()
         {
-            Console.WriteLine();
             Console.WriteLine("Tasks available from this directory: ");
             foreach (var task in this._taskLocator.ResolveAll())
             {
-                //Console.WriteLine($"Test: {task.Name}");
-                string taskNames = string.Join(", ", task.Name!.Split(Environment.NewLine));
-                Console.WriteLine("  {0,-20}\t{1}", taskNames, task.Description);
+                string taskNames = string.Join(", ", task.NameArray!);
+                Console.WriteLine("  {0,-30}  {1}", taskNames, task.Description);
             }
             Console.WriteLine();
             return 0;
@@ -96,7 +94,6 @@ namespace DotNetDo
 
         private int Help()
         {
-            Console.WriteLine();
             Console.WriteLine("DotNet Do [the do]");
             Console.WriteLine("  The DotNet CLI task runner. ");
             Console.WriteLine("  " + Assembly.GetEntryAssembly()?.GetName().Version);
