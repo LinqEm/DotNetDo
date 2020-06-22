@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DotNetDo
@@ -12,7 +13,7 @@ namespace DotNetDo
             this._configsLoader = configsLoader;
         }
 
-        public Task? Find(string taskName)
+        public Task? FindByName(string taskName)
         {
             foreach (var config in this._configsLoader)
             {
@@ -25,6 +26,29 @@ namespace DotNetDo
             }
             return null;
         }
+
+        public IEnumerable<Task> FindAll()
+        {
+            foreach (var config in this._configsLoader)
+                foreach (var task in config.Tasks)
+                    if (!string.IsNullOrWhiteSpace(task.Name))
+                        yield return task;
+        }
+
+        public IEnumerable<Task> ResolveAll()
+        {
+            var taskNamesVisited = new List<string>();
+            foreach (var task in this.FindAll())
+            {
+                var taskNames = task.Name!.Trim().Split(Environment.NewLine).Select(t => t.Trim().ToLower()).Where(t => !taskNamesVisited.Contains(t)).ToList();
+                if (!taskNames.Any()) 
+                    continue;
+                taskNamesVisited.AddRange(taskNames);
+                task.Name = string.Join(Environment.NewLine, taskNames);
+                yield return task;
+            }
+        }
+
 
     }
 }

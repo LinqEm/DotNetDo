@@ -1,7 +1,13 @@
-﻿namespace DotNetDo
+﻿using System.Collections.Generic;
+
+namespace DotNetDo
 {
     interface ITaskLocator
     {
-        Task? Find(string taskName);
+        Task? FindByName(string taskName);
+
+        IEnumerable<Task> FindAll();
+
+        IEnumerable<Task> ResolveAll();
     }
 }

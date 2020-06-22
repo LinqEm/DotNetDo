@@ -35,13 +35,15 @@ namespace DotNetDo
         {
             if (command == "--create")
                 return Create();
+            if (command == "--list")
+                return List();
             if (command == "--version")
                 return Version();
             else if (command == "--help" || command == "-h" || command == "-?")
                 return Help();
             else if (command != null)
             {
-                var task = this._taskLocator.Find(command);
+                var task = this._taskLocator.FindByName(command);
                 if (task == null)
                 {
                     Console.Error.WriteLine($"No task with the name of \"{command}\" was found.");
@@ -75,6 +77,20 @@ namespace DotNetDo
             var yaml = _serializer.Serialize(configuration);
             File.WriteAllText(CONFIGURATION_FILE_NAME, yaml);
             Console.WriteLine("A new tasks file (dotnet-tasks.yml) has been created. Try it out with `dotnet do echo`.");
+            return 0;
+        }
+
+        private int List()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Tasks available from this directory: ");
+            foreach (var task in this._taskLocator.ResolveAll())
+            {
+                //Console.WriteLine($"Test: {task.Name}");
+                string taskNames = string.Join(", ", task.Name!.Split(Environment.NewLine));
+                Console.WriteLine("  {0,-20}\t{1}", taskNames, task.Description);
+            }
+            Console.WriteLine();
             return 0;
         }
 
