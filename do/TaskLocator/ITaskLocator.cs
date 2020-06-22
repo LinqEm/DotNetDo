@@ -2,6 +2,6 @@
 {
     interface ITaskLocator
     {
-        Task Find(string taskName);
+        Task? Find(string taskName);
     }
 }

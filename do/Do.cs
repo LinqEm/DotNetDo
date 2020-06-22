@@ -44,7 +44,7 @@ namespace DotNetDo
                 var task = this._taskLocator.Find(command);
                 if (task == null)
                 {
-                    Console.Error.WriteLine($"No task with the name of \"{args[0]}\" was found.");
+                    Console.Error.WriteLine($"No task with the name of \"{command}\" was found.");
                     return 7001;
                 }
                 if (string.IsNullOrWhiteSpace(task.Run))
