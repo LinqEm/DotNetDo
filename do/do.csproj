@@ -12,9 +12,9 @@
     <Authors>ocridion</Authors>
     <PackageDescription>A task runner for the .NET CLI.</PackageDescription>
     <PackageTags>dotnet cli do task runner actions alias shorthand custom command</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageReleaseNotes>
-      - Add working-directory support (always relative to the yml location).
+      - Add timing information to task runs.
     </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/LinqEm/DotNetDo</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

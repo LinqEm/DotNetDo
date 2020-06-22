@@ -81,7 +81,7 @@ namespace DotNetDo
         private int Help()
         {
             Console.WriteLine();
-            Console.WriteLine("DotNet Do [The Do]");
+            Console.WriteLine("DotNet Do [the do]");
             Console.WriteLine("  The DotNet CLI task runner. ");
             Console.WriteLine("  " + Assembly.GetEntryAssembly()?.GetName().Version);
             Console.WriteLine();
